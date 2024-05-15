@@ -81,3 +81,13 @@
 260	3183	7374811748114987	CMakeFiles/dkr.dir/sortdialog.cpp.obj	d699c6105bbff334
 252	3818	7374811754433515	CMakeFiles/dkr.dir/mainwindow.cpp.obj	c551d7898a53b3cb
 3818	4114	7374811757365954	dkr.exe	ed14f35f906a51cb
+18	1086	7374876757072231	dkr_autogen/timestamp	a08c40cff4b6dcd
+18	1086	7374876757072231	dkr_autogen/mocs_compilation.cpp	a08c40cff4b6dcd
+18	1086	7374876757072231	D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/timestamp	a08c40cff4b6dcd
+18	1086	7374876757072231	D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/mocs_compilation.cpp	a08c40cff4b6dcd
+1114	3289	7374876780357789	CMakeFiles/dkr.dir/book.cpp.obj	53112b9b48d29bdb
+1101	4327	7374876790740410	CMakeFiles/dkr.dir/sortdialog.cpp.obj	d699c6105bbff334
+1088	4372	7374876791201615	CMakeFiles/dkr.dir/main.cpp.obj	573380b562951492
+1096	4466	7374876792141763	CMakeFiles/dkr.dir/dkr_autogen/mocs_compilation.cpp.obj	569fca54e2d9158d
+1107	4934	7374876796812320	CMakeFiles/dkr.dir/mainwindow.cpp.obj	c551d7898a53b3cb
+4934	5517	7374876802575482	dkr.exe	ed14f35f906a51cb

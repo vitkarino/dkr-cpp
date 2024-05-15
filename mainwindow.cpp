@@ -45,11 +45,11 @@ MainWindow::~MainWindow()
 
 // Ініціалізація початкового списку книг
 void MainWindow::initializeBooks() {
-    addBookToList(1, "To Kill a Mockingbird", "Harper Lee", "J.B. Lippincott & Co.", 1960, 281, 10.99, "Hardcover");
-    addBookToList(2, "1984", "George Orwell", "Secker & Warburg", 1949, 328, 12.99, "Hardcover");
-    addBookToList(3, "Moby Dick", "Herman Melville", "Harper & Brothers", 1851, 635, 15.99, "Hardcover");
-    addBookToList(4, "The Great Gatsby", "F. Scott Fitzgerald", "Charles Scribner's Sons", 1925, 180, 8.99, "Paperback");
-    addBookToList(5, "War and Peace", "Leo Tolstoy", "The Russian Messenger", 1869, 1225, 20.99, "Hardcover");
+    addBookToList(1, "Володар Перснів", "Дж. Р. Р. Толкін", "George Allen & Unwin", 1954, 1178, 25.99, "Тверда обкладинка");
+    addBookToList(2, "1984", "Джордж Орвелл", "Secker & Warburg", 1949, 328, 12.99, "Тверда обкладинка");
+    addBookToList(3, "Гаррі Поттер і філософський камінь", "Дж. К. Ролінґ", "Bloomsbury", 1997, 223, 9.99, "Тверда обкладинка");
+    addBookToList(4, "Великий Гетсбі", "Френсіс Скотт Фіцджеральд", "Charles Scribner's Sons", 1925, 180, 8.99, "М'яка обкладинка");
+    addBookToList(5, "Дюна", "Френк Герберт", "Chilton Books", 1965, 412, 15.99, "Тверда обкладинка");
 }
 
 // Додавання книги до списку книг
