@@ -85,7 +85,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>За датою</string>
+    <string>Після року</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="yearLine">

@@ -3,13 +3,14 @@
 
 #include <QString>
 
+// Клас з атрибутами
 class Book {
 public:
-    // Конструктор
+    // Конструктор (ініціалізує всі атрибути книги)
     Book(int id, const QString& name, const QString& author, const QString& publisher,
          int year, int pages, double price, const QString& cover);
 
-    // Геттери
+    // Геттери для доступу до атрибутів
     int getId() const;
     QString getName() const;
     QString getAuthor() const;
@@ -20,6 +21,7 @@ public:
     QString getCover() const;
 
 private:
+    // Приватні члени, що зберігають інформацію про книгу
     int id;
     QString name;
     QString author;

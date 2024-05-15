@@ -6,13 +6,15 @@
 #include <QTreeWidget>
 #include <QDateTime>
 
+// Конструктор головного вікна програми
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , logFile("log.txt")  // Ініціалізація файлу логів
+    , logFile("log.txt")
 {
     ui->setupUi(this);
 
+    // Відкриття файлу логів для запису
     if (!logFile.open(QIODevice::Append | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Помилка відкриття файлу"), tr("Не вдалося відкрити файл логів."));
     }
@@ -27,19 +29,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->searchButton, &QPushButton::clicked, this, &MainWindow::searchBooks);
     connect(ui->aboutMe, &QAction::triggered, this, &MainWindow::aboutWindow);
 
-    // Ініціалізація книг
+    // Ініціалізація початкового списку книг
     initializeBooks();
 }
 
+// Деструктор головного вікна програми
 MainWindow::~MainWindow()
 {
+    // Закриття файлу логів, якщо він відкритий
     if (logFile.isOpen()) {
-        logFile.close();  // Закриття файлу логів
+        logFile.close();
     }
-    delete ui;
+    delete ui; // Очищення інтерфейсу користувача
 }
 
-
+// Ініціалізація початкового списку книг
 void MainWindow::initializeBooks() {
     addBookToList(1, "To Kill a Mockingbird", "Harper Lee", "J.B. Lippincott & Co.", 1960, 281, 10.99, "Hardcover");
     addBookToList(2, "1984", "George Orwell", "Secker & Warburg", 1949, 328, 12.99, "Hardcover");
@@ -48,6 +52,7 @@ void MainWindow::initializeBooks() {
     addBookToList(5, "War and Peace", "Leo Tolstoy", "The Russian Messenger", 1869, 1225, 20.99, "Hardcover");
 }
 
+// Додавання книги до списку книг
 void MainWindow::addBookToList(int id, const QString& title, const QString& author, const QString& publisher, int year, int pages, double price, const QString& cover) {
     QTreeWidgetItem *item = new QTreeWidgetItem(ui->bookList);
     item->setText(0, QString::number(id));
@@ -63,6 +68,7 @@ void MainWindow::addBookToList(int id, const QString& title, const QString& auth
     logMessage(QString("Додана книга: %1").arg(title));
 }
 
+// Слот для додавання нової книги через діалогове вікно
 void MainWindow::addBook() {
     bool ok;
     QString title = QInputDialog::getText(this, tr("Нова книга"), tr("Назва:"), QLineEdit::Normal, QString(), &ok);
@@ -100,10 +106,11 @@ void MainWindow::addBook() {
     logMessage(QString("Додана нова книга: %1").arg(title));
 }
 
+// Слот для видалення обраної книги
 void MainWindow::removeBook() {
     QTreeWidgetItem *item = ui->bookList->currentItem();
     if (item) {
-        QString title = item->text(1);  // Оголошення змінної title перед її використанням
+        QString title = item->text(1);
         delete item;
         logMessage(QString("Видалена книга: %1").arg(title));
     } else {
@@ -111,7 +118,7 @@ void MainWindow::removeBook() {
     }
 }
 
-
+// Слот для пошуку книг за назвою
 void MainWindow::searchBooks() {
     QString searchText = ui->searchLine->text().trimmed();
     if (searchText.isEmpty()) {
@@ -134,6 +141,7 @@ void MainWindow::searchBooks() {
     logMessage(QString("Пошук книг за назвою: %1").arg(searchText));
 }
 
+// Слот для відкриття діалогового вікна сортування
 void MainWindow::sortWindow() {
     QStringList authors;
     QStringList publishers;
@@ -162,11 +170,13 @@ void MainWindow::sortWindow() {
     }
 }
 
+// Слот для відкриття вікна "Про автора"
 void MainWindow::aboutWindow() {
     QMessageBox::information(this, "Про автора", "Автор: Студент групи РЕ-21 - Кисіль Віктор Андрійович");
     logMessage("Відкрите вікно 'Про автора'");
 }
 
+// Метод для застосування сортування книг
 void MainWindow::applySorting(const QString &author, const QString &publisher, const QString &yearStr) {
     int year = yearStr.toInt();
 
@@ -174,20 +184,25 @@ void MainWindow::applySorting(const QString &author, const QString &publisher, c
         QTreeWidgetItem *item = ui->bookList->topLevelItem(i);
         bool match = true;
 
-        if (!author.isEmpty() && item->text(2) != author)
+        if (!author.isEmpty() && item->text(2) != author) {
             match = false;
+        }
 
-        if (!publisher.isEmpty() && item->text(3) != publisher)
+        if (!publisher.isEmpty() && item->text(3) != publisher) {
             match = false;
+        }
 
-        if (!yearStr.isEmpty() && item->text(4).toInt() != year)
+        if (!yearStr.isEmpty() && item->text(4).toInt() <= year) {
             match = false;
+        }
 
         item->setHidden(!match);
     }
-    logMessage(QString("Застосоване сортування: автор - %1, видавництво - %2, рік - %3").arg(author, publisher, yearStr));
+
+    logMessage(QString("Застосоване сортування: автор - %1, видавництво - %2, після року - %3").arg(author, publisher, yearStr));
 }
 
+// Метод для логування повідомлень
 void MainWindow::logMessage(const QString &message) {
     QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     QString logEntry = QString("[%1] %2").arg(timestamp, message);

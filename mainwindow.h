@@ -13,15 +13,20 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+// Головне вікно програми
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    // Конструктор для ініціалізації головного вікна
     MainWindow(QWidget *parent = nullptr);
+
+    // Деструкток для очищення ресурсів
     ~MainWindow();
 
 private slots:
+    // Слоти для обробки дій користувача
     void addBook();
     void removeBook();
     void searchBooks();
@@ -30,11 +35,12 @@ private slots:
     void applySorting(const QString &author, const QString &publisher, const QString &yearStr);
 
 private:
+    // Приватні методи для внутрішнього використання
     void initializeBooks();
     void addBookToList(int id, const QString& title, const QString& author, const QString& publisher, int year, int pages, double price, const QString& cover);
     void logMessage(const QString &message);  // Новий метод для логування
 
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; // Вказівник на інтерфейс користувача
     QFile logFile;  // Файл для зберігання логів
 };
 
