@@ -1,6 +1,6 @@
 D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/EWIEGA46WW/moc_sortdialog.cpp: D:/Coding/CPP/dkr/sortdialog.h \
   D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/moc_predefs.h \
-  C:/Qt/6.8.0/mingw_64/include/QtCore/QDate \
+  C:/Qt/6.8.0/mingw_64/include/QtCore/QStringList \
   C:/Qt/6.8.0/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/q20memory.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/q20type_traits.h \
@@ -19,7 +19,6 @@ D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/EWIEGA46
   C:/Qt/6.8.0/mingw_64/include/QtCore/qbytearrayalgorithms.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qbytearraylist.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qbytearrayview.h \
-  C:/Qt/6.8.0/mingw_64/include/QtCore/qcalendar.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qchar.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qcompare.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qcompare_impl.h \
@@ -33,7 +32,6 @@ D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/EWIEGA46
   C:/Qt/6.8.0/mingw_64/include/QtCore/qcontiguouscache.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qdarwinhelpers.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qdatastream.h \
-  C:/Qt/6.8.0/mingw_64/include/QtCore/qdatetime.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qdebug.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qendian.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qexceptionhandling.h \
@@ -53,7 +51,6 @@ D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/EWIEGA46
   C:/Qt/6.8.0/mingw_64/include/QtCore/qlatin1stringview.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qline.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qlist.h \
-  C:/Qt/6.8.0/mingw_64/include/QtCore/qlocale.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qlogging.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qmalloc.h \
   C:/Qt/6.8.0/mingw_64/include/QtCore/qmap.h \
@@ -146,8 +143,12 @@ D:/Coding/CPP/dkr/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/dkr_autogen/EWIEGA46
   C:/Qt/6.8.0/mingw_64/include/QtGui/qtransform.h \
   C:/Qt/6.8.0/mingw_64/include/QtGui/qwindowdefs.h \
   C:/Qt/6.8.0/mingw_64/include/QtGui/qwindowdefs_win.h \
+  C:/Qt/6.8.0/mingw_64/include/QtWidgets/QAbstractButton \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/QDialog \
+  C:/Qt/6.8.0/mingw_64/include/QtWidgets/QDialogButtonBox \
+  C:/Qt/6.8.0/mingw_64/include/QtWidgets/qabstractbutton.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qdialog.h \
+  C:/Qt/6.8.0/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qsizepolicy.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgets-config.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgetsexports.h \

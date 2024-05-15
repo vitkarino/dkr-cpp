@@ -200,7 +200,7 @@ build dkr_autogen/timestamp dkr_autogen/mocs_compilation.cpp | ${cmake_ninja_wor
 #############################################
 # Phony custom command for CMakeFiles\dkr_autogen_timestamp_deps
 
-build CMakeFiles/dkr_autogen_timestamp_deps | ${cmake_ninja_workdir}CMakeFiles/dkr_autogen_timestamp_deps: phony C$:/Qt/6.8.0/mingw_64/lib/libQt6Core.a C$:/Qt/6.8.0/mingw_64/./bin/moc.exe C$:/Qt/6.8.0/mingw_64/./bin/uic.exe C$:/Qt/6.8.0/mingw_64/lib/libQt6Widgets.a
+build CMakeFiles/dkr_autogen_timestamp_deps | ${cmake_ninja_workdir}CMakeFiles/dkr_autogen_timestamp_deps: phony C$:/Qt/6.8.0/mingw_64/./bin/uic.exe C$:/Qt/6.8.0/mingw_64/lib/libQt6Core.a C$:/Qt/6.8.0/mingw_64/./bin/moc.exe C$:/Qt/6.8.0/mingw_64/lib/libQt6Widgets.a
 
 
 #############################################

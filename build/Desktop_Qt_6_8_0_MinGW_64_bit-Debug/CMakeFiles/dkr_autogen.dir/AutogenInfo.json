@@ -257,12 +257,6 @@
 	"DEP_FILE_RULE_NAME" : "dkr_autogen/timestamp",
 	"HEADERS" : 
 	[
-		[
-			"D:/Coding/CPP/dkr/BookManager.h",
-			"MU",
-			"EWIEGA46WW/moc_BookManager.cpp",
-			null
-		],
 		[ "D:/Coding/CPP/dkr/book.h", "MU", "EWIEGA46WW/moc_book.cpp", null ],
 		[
 			"D:/Coding/CPP/dkr/mainwindow.h",

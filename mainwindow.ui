@@ -17,7 +17,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="addButton">
     <property name="geometry">
      <rect>
       <x>600</x>
@@ -30,7 +30,7 @@
      <string>Додати книгу</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="removeButton">
     <property name="geometry">
      <rect>
       <x>720</x>
@@ -43,7 +43,7 @@
      <string>Видалити книгу</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="sortButton">
     <property name="geometry">
      <rect>
       <x>480</x>
@@ -56,17 +56,17 @@
      <string>Сортування</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget_2">
+   <widget class="QListWidget" name="consoleBlock">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>390</y>
-      <width>281</width>
+      <width>821</width>
       <height>81</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="consoleLabel">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -79,7 +79,7 @@
      <string>Консоль</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="listLabel">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -92,7 +92,7 @@
      <string>Список книг</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="searchLine">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -102,7 +102,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="searchLabel">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -115,7 +115,7 @@
      <string>Пошук за назвою</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="searchButton">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -128,7 +128,7 @@
      <string>Пошук</string>
     </property>
    </widget>
-   <widget class="QTreeWidget" name="treeWidget">
+   <widget class="QTreeWidget" name="bookList">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -192,32 +192,32 @@
     <property name="title">
      <string>Меню</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
+    <addaction name="addBookAction"/>
+    <addaction name="removeBookAction"/>
+    <addaction name="sortAction"/>
     <addaction name="separator"/>
-    <addaction name="action_5"/>
+    <addaction name="aboutMe"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="addBookAction">
    <property name="text">
     <string>Додати книгу</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="removeBookAction">
    <property name="text">
     <string>Видалити книгу</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="sortAction">
    <property name="text">
     <string>Сортування</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="aboutMe">
    <property name="text">
     <string>Про автора</string>
    </property>

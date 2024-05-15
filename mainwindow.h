@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QListWidget>
-#include "Book.h"
+#include <QFile>
+#include <QTextStream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,17 +22,20 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_action3_triggered();
-    void on_action5_triggered();
-    void on_pushbutton3_clicked();
     void addBook();
     void removeBook();
     void searchBooks();
-    void on_sortButton_clicked();
+    void sortWindow();
+    void aboutWindow();
     void applySorting(const QString &author, const QString &publisher, const QString &yearStr);
 
 private:
-    QListWidget *listWidget;
+    void initializeBooks();
+    void addBookToList(int id, const QString& title, const QString& author, const QString& publisher, int year, int pages, double price, const QString& cover);
+    void logMessage(const QString &message);  // Новий метод для логування
+
     Ui::MainWindow *ui;
+    QFile logFile;  // Файл для зберігання логів
 };
+
 #endif // MAINWINDOW_H

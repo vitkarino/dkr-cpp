@@ -27,7 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
         sortdialog.ui
-        BookManager.h
+
         book.h
         book.cpp
         sortdialog.h

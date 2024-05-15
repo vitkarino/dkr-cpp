@@ -1,12 +1,12 @@
-#include "Book.h"
+#include "book.h"
 
-// Constructor implementation
+// Реалізація конструктора
 Book::Book(int id, const QString& name, const QString& author, const QString& publisher,
            int year, int pages, double price, const QString& cover)
     : id(id), name(name), author(author), publisher(publisher),
     year(year), pages(pages), price(price), cover(cover) {}
 
-// Getters implementations
+// Реалізація геттерів
 int Book::getId() const { return id; }
 QString Book::getName() const { return name; }
 QString Book::getAuthor() const { return author; }

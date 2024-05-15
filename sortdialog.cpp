@@ -1,29 +1,43 @@
 #include "sortdialog.h"
 #include "./ui_sortdialog.h"
 
-SortDialog::SortDialog(QWidget *parent) :
+SortDialog::SortDialog(const QStringList &authors, const QStringList &publishers, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SortDialog)  // This is correct if ui_sortdialog.h is correctly included
+    ui(new Ui::SortDialog)
 {
-    ui->setupUi(this);  // This should work if all includes are correct
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
+    ui->setupUi(this);
+
+    // Заповнюємо QComboBox авторами і видавництвами
+    ui->authorList->addItem("");
+    ui->authorList->addItems(authors);
+    ui->publisherList->addItem("");
+    ui->publisherList->addItems(publishers);
+
+    connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &SortDialog::handleButtonClicked);
 }
 
 SortDialog::~SortDialog()
 {
-    delete ui;  // Safe to delete if all is well
+    delete ui;
 }
 
 QString SortDialog::getAuthor() const {
-    return ui->comboBoxAuthor->currentText();
+    return ui->authorList->currentText();
 }
 
 QString SortDialog::getPublisher() const {
-    return ui->comboBoxPublisher->currentText();
+    return ui->publisherList->currentText();
 }
 
 QString SortDialog::getYear() const {
-    return ui->lineEditDate->text();  // Returning the text as a string
+    return ui->yearLine->text();
 }
 
+void SortDialog::handleButtonClicked(QAbstractButton *button) {
+    QDialogButtonBox::StandardButton stdButton = ui->buttonBox->standardButton(button);
+    if (stdButton == QDialogButtonBox::Apply) {
+        accept();
+    } else if (stdButton == QDialogButtonBox::Cancel) {
+        reject();
+    }
+}

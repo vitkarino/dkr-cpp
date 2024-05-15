@@ -4,25 +4,63 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QTreeWidget>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , logFile("log.txt")  // Ініціалізація файлу логів
 {
     ui->setupUi(this);
 
-    connect(ui->action, &QAction::triggered, this, &MainWindow::addBook);
-    connect(ui->action_2, &QAction::triggered, this, &MainWindow::removeBook);
-    connect(ui->action_3, &QAction::triggered, this, &MainWindow::on_action3_triggered);
-    connect(ui->action_5, &QAction::triggered, this, &MainWindow::on_action5_triggered);
-    connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::on_pushbutton3_clicked);
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::addBook);
-    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::removeBook);
-    connect(ui->pushButton_4, &QPushButton::clicked, this, &MainWindow::searchBooks);
+    if (!logFile.open(QIODevice::Append | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Помилка відкриття файлу"), tr("Не вдалося відкрити файл логів."));
+    }
+
+    // Підключення сигналів до слотів
+    connect(ui->addButton, &QPushButton::clicked, this, &MainWindow::addBook);
+    connect(ui->addBookAction, &QAction::triggered, this, &MainWindow::addBook);
+    connect(ui->removeButton, &QPushButton::clicked, this, &MainWindow::removeBook);
+    connect(ui->removeBookAction, &QAction::triggered, this, &MainWindow::removeBook);
+    connect(ui->sortAction, &QAction::triggered, this, &MainWindow::sortWindow);
+    connect(ui->sortButton, &QPushButton::clicked, this, &MainWindow::sortWindow);
+    connect(ui->searchButton, &QPushButton::clicked, this, &MainWindow::searchBooks);
+    connect(ui->aboutMe, &QAction::triggered, this, &MainWindow::aboutWindow);
+
+    // Ініціалізація книг
+    initializeBooks();
 }
 
 MainWindow::~MainWindow()
 {
+    if (logFile.isOpen()) {
+        logFile.close();  // Закриття файлу логів
+    }
+    delete ui;
+}
+
+
+void MainWindow::initializeBooks() {
+    addBookToList(1, "To Kill a Mockingbird", "Harper Lee", "J.B. Lippincott & Co.", 1960, 281, 10.99, "Hardcover");
+    addBookToList(2, "1984", "George Orwell", "Secker & Warburg", 1949, 328, 12.99, "Hardcover");
+    addBookToList(3, "Moby Dick", "Herman Melville", "Harper & Brothers", 1851, 635, 15.99, "Hardcover");
+    addBookToList(4, "The Great Gatsby", "F. Scott Fitzgerald", "Charles Scribner's Sons", 1925, 180, 8.99, "Paperback");
+    addBookToList(5, "War and Peace", "Leo Tolstoy", "The Russian Messenger", 1869, 1225, 20.99, "Hardcover");
+}
+
+void MainWindow::addBookToList(int id, const QString& title, const QString& author, const QString& publisher, int year, int pages, double price, const QString& cover) {
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui->bookList);
+    item->setText(0, QString::number(id));
+    item->setText(1, title);
+    item->setText(2, author);
+    item->setText(3, publisher);
+    item->setText(4, QString::number(year));
+    item->setText(5, QString::number(pages));
+    item->setText(6, QString::number(price));
+    item->setText(7, cover);
+    ui->bookList->addTopLevelItem(item);
+
+    logMessage(QString("Додана книга: %1").arg(title));
 }
 
 void MainWindow::addBook() {
@@ -48,8 +86,8 @@ void MainWindow::addBook() {
     QString cover = QInputDialog::getText(this, tr("Нова книга"), tr("Тип палітурки:"), QLineEdit::Normal, QString(), &ok);
     if (!ok || cover.isEmpty()) return;
 
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-    item->setText(0, QString::number(ui->treeWidget->topLevelItemCount())); // Assuming ID is a sequential number
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui->bookList);
+    item->setText(0, QString::number(ui->bookList->topLevelItemCount()));
     item->setText(1, title);
     item->setText(2, author);
     item->setText(3, publisher);
@@ -57,80 +95,83 @@ void MainWindow::addBook() {
     item->setText(5, QString::number(pages));
     item->setText(6, QString::number(price));
     item->setText(7, cover);
-    ui->treeWidget->addTopLevelItem(item);
+    ui->bookList->addTopLevelItem(item);
+
+    logMessage(QString("Додана нова книга: %1").arg(title));
 }
 
-
 void MainWindow::removeBook() {
-    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    QTreeWidgetItem *item = ui->bookList->currentItem();
     if (item) {
-        delete item;  // This removes and deletes the item
+        QString title = item->text(1);  // Оголошення змінної title перед її використанням
+        delete item;
+        logMessage(QString("Видалена книга: %1").arg(title));
     } else {
         QMessageBox::warning(this, tr("Видалення книги"), tr("Будь ласка оберіть книгу для видалення."));
     }
 }
 
+
 void MainWindow::searchBooks() {
-    QString searchText = ui->lineEdit->text().trimmed();  // Get text from QLineEdit
+    QString searchText = ui->searchLine->text().trimmed();
     if (searchText.isEmpty()) {
-        for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
-            QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
-            item->setHidden(false);  // Show all items if the search text is empty
+        for (int i = 0; i < ui->bookList->topLevelItemCount(); ++i) {
+            QTreeWidgetItem *item = ui->bookList->topLevelItem(i);
+            item->setHidden(false);
         }
+        logMessage("Скидання пошуку");
         return;
     }
 
-    // Filter items based on the title
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
-        if (item->text(1).contains(searchText, Qt::CaseInsensitive)) {  // Assuming the title is in the second column
+    for (int i = 0; i < ui->bookList->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *item = ui->bookList->topLevelItem(i);
+        if (item->text(1).contains(searchText, Qt::CaseInsensitive)) {
             item->setHidden(false);
         } else {
             item->setHidden(true);
         }
     }
+    logMessage(QString("Пошук книг за назвою: %1").arg(searchText));
 }
 
-void MainWindow::on_pushbutton3_clicked() {
-    SortDialog dialog(this);
-    dialog.exec();
-}
+void MainWindow::sortWindow() {
+    QStringList authors;
+    QStringList publishers;
 
-void MainWindow::on_action5_triggered() {
-    QMessageBox::information(this, "Про автора", "Автор: Студент групи РЕ-21 - Кисіль Віктор Андрійович"); // Pop-up using QMessageBox
-}
+    for (int i = 0; i < ui->bookList->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *item = ui->bookList->topLevelItem(i);
+        QString author = item->text(2);
+        QString publisher = item->text(3);
 
-void MainWindow::on_action3_triggered() {
-    SortDialog dialog(this);
-    dialog.exec();
-}
+        if (!authors.contains(author)) {
+            authors.append(author);
+        }
 
-void MainWindow::on_sortButton_clicked() {
-    SortDialog *dialog = new SortDialog(this);
-
-    if (dialog->exec() == QDialog::Accepted) {
-        QString author = dialog->getAuthor();
-        QString publisher = dialog->getPublisher();
-        QString yearStr = dialog->getYear();
-
-        applySorting(author, publisher, yearStr);
-    }
-
-    delete dialog;
-}
-
-void MainWindow::applySorting(const QString &author, const QString &publisher, const QString &yearStr) {
-    QDate year;
-    if (!yearStr.isEmpty()) {
-        year = QDate::fromString(yearStr, "yyyy");  // Convert string to QDate
-        if (!year.isValid()) {
-            QMessageBox::warning(this, "Invalid Date", "The entered year is invalid. Please use format YYYY.");
-            return;
+        if (!publishers.contains(publisher)) {
+            publishers.append(publisher);
         }
     }
 
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
-        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(i);
+    SortDialog dialog(authors, publishers, this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString author = dialog.getAuthor();
+        QString publisher = dialog.getPublisher();
+        QString yearStr = dialog.getYear();
+
+        applySorting(author, publisher, yearStr);
+    }
+}
+
+void MainWindow::aboutWindow() {
+    QMessageBox::information(this, "Про автора", "Автор: Студент групи РЕ-21 - Кисіль Віктор Андрійович");
+    logMessage("Відкрите вікно 'Про автора'");
+}
+
+void MainWindow::applySorting(const QString &author, const QString &publisher, const QString &yearStr) {
+    int year = yearStr.toInt();
+
+    for (int i = 0; i < ui->bookList->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *item = ui->bookList->topLevelItem(i);
         bool match = true;
 
         if (!author.isEmpty() && item->text(2) != author)
@@ -139,13 +180,26 @@ void MainWindow::applySorting(const QString &author, const QString &publisher, c
         if (!publisher.isEmpty() && item->text(3) != publisher)
             match = false;
 
-        if (!yearStr.isEmpty() && QDate::fromString(item->text(4), "yyyy") != year)
+        if (!yearStr.isEmpty() && item->text(4).toInt() != year)
             match = false;
 
         item->setHidden(!match);
     }
+    logMessage(QString("Застосоване сортування: автор - %1, видавництво - %2, рік - %3").arg(author, publisher, yearStr));
 }
 
+void MainWindow::logMessage(const QString &message) {
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    QString logEntry = QString("[%1] %2").arg(timestamp, message);
 
+    // Додавання повідомлення до графічної консолі
+    ui->consoleBlock->addItem(logEntry);
+    ui->consoleBlock->scrollToBottom();  // Автоматичне прокручування до кінця
 
+    // Запис повідомлення у файл логів
+    if (logFile.isOpen()) {
+        QTextStream out(&logFile);
+        out << logEntry << "\n";
+    }
+}
 

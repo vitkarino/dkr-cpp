@@ -5,11 +5,11 @@
 
 class Book {
 public:
-    // Constructor to initialize the book with properties
+    // Конструктор
     Book(int id, const QString& name, const QString& author, const QString& publisher,
          int year, int pages, double price, const QString& cover);
 
-    // Getters for each property
+    // Геттери
     int getId() const;
     QString getName() const;
     QString getAuthor() const;
@@ -20,7 +20,6 @@ public:
     QString getCover() const;
 
 private:
-    // Properties of the book
     int id;
     QString name;
     QString author;
