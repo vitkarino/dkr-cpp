@@ -1,16 +1,19 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "sortdialog.h"
+#include "book.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QTreeWidget>
 #include <QDateTime>
+#include <QSqlQuery>
 
 // Конструктор головного вікна програми
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , logFile("log.txt")
+    , currentId(1)
 {
     ui->setupUi(this);
 
@@ -29,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->searchButton, &QPushButton::clicked, this, &MainWindow::searchBooks);
     connect(ui->aboutMe, &QAction::triggered, this, &MainWindow::aboutWindow);
 
-    // Ініціалізація початкового списку книг
-    initializeBooks();
+    initializeDatabase(); // Ініціалізація БЗ
+    loadBooksFromDatabase(); // Завантаження книг з БЗ
 }
 
 // Деструктор головного вікна програми
@@ -43,13 +46,64 @@ MainWindow::~MainWindow()
     delete ui; // Очищення інтерфейсу користувача
 }
 
-// Ініціалізація початкового списку книг
-void MainWindow::initializeBooks() {
-    addBookToList(1, "Володар Перснів", "Дж. Р. Р. Толкін", "George Allen & Unwin", 1954, 1178, 25.99, "Тверда обкладинка");
-    addBookToList(2, "1984", "Джордж Орвелл", "Secker & Warburg", 1949, 328, 12.99, "Тверда обкладинка");
-    addBookToList(3, "Гаррі Поттер і філософський камінь", "Дж. К. Ролінґ", "Bloomsbury", 1997, 223, 9.99, "Тверда обкладинка");
-    addBookToList(4, "Великий Гетсбі", "Френсіс Скотт Фіцджеральд", "Charles Scribner's Sons", 1925, 180, 8.99, "М'яка обкладинка");
-    addBookToList(5, "Дюна", "Френк Герберт", "Chilton Books", 1965, 412, 15.99, "Тверда обкладинка");
+// Ініціалізація бази даних
+void MainWindow::initializeDatabase() {
+    // Створення БЗ
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("books.db");
+
+    if (!db.open()) {
+        QMessageBox::critical(this, "Помилка бази даних", "Не вдалося відкрити базу даних.");
+        return;
+    }
+
+    QSqlQuery query;
+    query.exec("CREATE TABLE IF NOT EXISTS books ("
+               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+               "name TEXT, "
+               "author TEXT, "
+               "publisher TEXT, "
+               "year INTEGER, "
+               "pages INTEGER, "
+               "price REAL, "
+               "cover TEXT)");
+
+    model = new QSqlTableModel(this, db);
+    model->setTable("books");
+    model->select();
+}
+
+// Завантаження книг з бази даних
+void MainWindow::loadBooksFromDatabase() {
+    QSqlQuery query("SELECT id, name, author, publisher, year, pages, price, cover FROM books");
+    int maxId = 0;
+    while (query.next()) {
+        int id = query.value(0).toInt();
+        QString name = query.value(1).toString();
+        QString author = query.value(2).toString();
+        QString publisher = query.value(3).toString();
+        int year = query.value(4).toInt();
+        int pages = query.value(5).toInt();
+        double price = query.value(6).toDouble();
+        QString cover = query.value(7).toString();
+
+        addBookToList(id, name, author, publisher, year, pages, price, cover);
+
+        if (id > maxId) {
+            maxId = id;
+        }
+    }
+    currentId = maxId + 1;
+}
+
+// Видалення книги з бази даних
+void MainWindow::removeBookFromDatabase(int id) {
+    QSqlQuery query;
+    query.prepare("DELETE FROM books WHERE id = :id");
+    query.bindValue(":id", id);
+    if (!query.exec()) {
+        QMessageBox::warning(this, "Помилка бази даних", "Не вдалося видалити книгу з бази даних.");
+    }
 }
 
 // Додавання книги до списку книг
@@ -92,25 +146,34 @@ void MainWindow::addBook() {
     QString cover = QInputDialog::getText(this, tr("Нова книга"), tr("Тип палітурки:"), QLineEdit::Normal, QString(), &ok);
     if (!ok || cover.isEmpty()) return;
 
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->bookList);
-    item->setText(0, QString::number(ui->bookList->topLevelItemCount()));
-    item->setText(1, title);
-    item->setText(2, author);
-    item->setText(3, publisher);
-    item->setText(4, QString::number(year));
-    item->setText(5, QString::number(pages));
-    item->setText(6, QString::number(price));
-    item->setText(7, cover);
-    ui->bookList->addTopLevelItem(item);
+    int id = currentId++;
 
-    logMessage(QString("Додана нова книга: %1").arg(title));
+    QSqlQuery query;
+    query.prepare("INSERT INTO books (id, name, author, publisher, year, pages, price, cover) "
+                  "VALUES (:id, :name, :author, :publisher, :year, :pages, :price, :cover)");
+    query.bindValue(":id", id);
+    query.bindValue(":name", title);
+    query.bindValue(":author", author);
+    query.bindValue(":publisher", publisher);
+    query.bindValue(":year", year);
+    query.bindValue(":pages", pages);
+    query.bindValue(":price", price);
+    query.bindValue(":cover", cover);
+    if (!query.exec()) {
+        QMessageBox::warning(this, "Помилка бази даних", "Не вдалося зберегти книгу в базу даних.");
+        return;
+    }
+
+    addBookToList(id, title, author, publisher, year, pages, price, cover);
 }
 
-// Слот для видалення обраної книги
+// Слот для видалення обраної книги зі списку
 void MainWindow::removeBook() {
     QTreeWidgetItem *item = ui->bookList->currentItem();
     if (item) {
+        int id = item->text(0).toInt();
         QString title = item->text(1);
+        removeBookFromDatabase(id);
         delete item;
         logMessage(QString("Видалена книга: %1").arg(title));
     } else {
@@ -217,4 +280,3 @@ void MainWindow::logMessage(const QString &message) {
         out << logEntry << "\n";
     }
 }
-

@@ -6,6 +6,11 @@
 #include <QListWidget>
 #include <QFile>
 #include <QTextStream>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlTableModel>
+#include "book.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,7 +43,17 @@ private:
     // Приватні методи для внутрішнього використання
     void initializeBooks();
     void addBookToList(int id, const QString& title, const QString& author, const QString& publisher, int year, int pages, double price, const QString& cover);
-    void logMessage(const QString &message);  // Новий метод для логування
+    void logMessage(const QString &message);  // Метод для логування
+
+    void initializeDatabase();
+    void loadBooksFromDatabase();
+    void saveBookToDatabase(const Book &book);
+    void removeBookFromDatabase(int id);
+
+    int currentId;
+
+    QSqlDatabase db;
+    QSqlTableModel *model;
 
     Ui::MainWindow *ui; // Вказівник на інтерфейс користувача
     QFile logFile;  // Файл для зберігання логів
